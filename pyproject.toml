@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "neuroslicer"
+version = "0.1.0"
+description = "AI-assisted 3D printing troubleshooting assistant"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.setuptools.packages.find]
+include = ["neuroslicer*"]
+
+[project.scripts]
+neuroslicer = "neuroslicer.cli:main"
