@@ -60,8 +60,16 @@ class ProfileManager:
         for change in changes:
             if change.parameter not in self.parameters:
                 continue
+            old_value = self.parameters[change.parameter]
             self.parameters[change.parameter] = change.new_value
-            applied.append(change)
+            applied.append(
+                ProfileChange(
+                    parameter=change.parameter,
+                    old_value=old_value,
+                    new_value=change.new_value,
+                    reason=change.reason,
+                )
+            )
         return applied
 
 

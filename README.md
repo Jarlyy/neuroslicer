@@ -29,14 +29,38 @@ neuroslicer "Слои расслаиваются, деталь ломается 
 
 ### 2) Диагностика с markdown-базой из локального troubleshooting-репозитория
 
+По умолчанию CLI сначала пытается автоматически найти guide в стандартных папках проекта:
+- `data/3D-printing-troubleshooting-guide`
+- `data/troubleshooting-guide`
+- `3D-printing-troubleshooting-guide`
+- `troubleshooting-guide`
+
+Можно явно задать путь:
+
 ```bash
 neuroslicer "Нити между стенками" --kb-markdown-dir /path/to/3D-printing-troubleshooting-guide
 ```
 
-### 3) Включение запроса к Hugging Face API (gpt-oss-120b)
+Или через переменную окружения:
 
 ```bash
-neuroslicer "Плохая адгезия первого слоя" --use-hf
+export TROUBLESHOOTING_GUIDE_DIR="/path/to/3D-printing-troubleshooting-guide"
+```
+
+Если guide не найден, используется `data/troubleshooting_seed.json`.
+
+### 3) Использование Hugging Face API (gpt-oss-120b)
+
+Если `HF_TOKEN` задан, нейросетевой анализ включается автоматически.
+
+```bash
+neuroslicer "Плохая адгезия первого слоя"
+```
+
+Отключить нейросеть (только retrieval fallback):
+
+```bash
+neuroslicer "Плохая адгезия первого слоя" --no-hf
 ```
 
 ### 4) Применение рекомендаций к профилю OrcaSlicer
@@ -47,9 +71,18 @@ neuroslicer "Слои расслаиваются" --profile-in profile.json --pr
 
 Поддерживаются входные форматы профиля: `.json`, `.ini`.
 
+### 5) Предпросмотр без записи профиля (dry-run)
+
+```bash
+neuroslicer "Слои расслаиваются" --profile-in profile.json --profile-out profile_patched.json --dry-run --show-kb-source
+```
+
+`--dry-run` покажет рекомендуемые `profile_changes`, но не сохранит файл.
+`--show-kb-source` добавит в JSON-ответ поле `kb_source` с фактическим источником знаний.
+
 ## Что реализовано сейчас
 
 - Загрузка кейсов из JSON и markdown.
-- Retrieval-диагностика по симптомам + confidence.
-- Опциональный HF вызов для LLM-анализа (`openai/gpt-oss-120b`).
+- Retrieval-диагностика по симптомам на BM25 + overlap bonus + RU/EN синонимы.
+- Нейросетевой анализ через Hugging Face (`openai/gpt-oss-120b`) с контекстом из troubleshooting guide и JSON-ответом.
 - Генерация profile diff-рекомендаций и запись обновленного профиля.

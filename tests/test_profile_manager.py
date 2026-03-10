@@ -21,3 +21,4 @@ def test_profile_json_load_apply_and_save(tmp_path: Path):
     assert applied
     assert saved["nozzle_temperature"] == "210"
     assert saved["fan_speed_first_layer"] == "0"
+    assert any(change.old_value == "200" and change.parameter == "nozzle_temperature" for change in applied)

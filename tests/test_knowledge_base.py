@@ -19,3 +19,10 @@ def test_markdown_loader(tmp_path: Path):
     kb = KnowledgeBase.from_markdown_dir(tmp_path)
     assert len(kb.entries) == 1
     assert kb.entries[0].category == "Stringing"
+
+
+def test_synonym_matching_ru_to_en_seed_data():
+    kb = KnowledgeBase.from_json("data/troubleshooting_seed.json")
+    matches = kb.best_matches("плохая адгезия к столу", top_k=1)
+    assert matches
+    assert matches[0].category == "Poor Bed Adhesion"
