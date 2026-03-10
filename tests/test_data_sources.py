@@ -32,6 +32,7 @@ def test_cli_loads_markdown_guide_when_detected(monkeypatch, tmp_path: Path):
         kb_json="data/troubleshooting_seed.json",
     )
 
-    kb = _load_knowledge_base(args)
+    kb, source = _load_knowledge_base(args)
     assert kb.entries
     assert kb.entries[0].category == "Layer Separation"
+    assert source.startswith("markdown:")

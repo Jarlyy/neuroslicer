@@ -63,6 +63,15 @@ neuroslicer "Слои расслаиваются" --profile-in profile.json --pr
 
 Поддерживаются входные форматы профиля: `.json`, `.ini`.
 
+### 5) Предпросмотр без записи профиля (dry-run)
+
+```bash
+neuroslicer "Слои расслаиваются" --profile-in profile.json --profile-out profile_patched.json --dry-run --show-kb-source
+```
+
+`--dry-run` покажет рекомендуемые `profile_changes`, но не сохранит файл.
+`--show-kb-source` добавит в JSON-ответ поле `kb_source` с фактическим источником знаний.
+
 ## Что реализовано сейчас
 
 - Загрузка кейсов из JSON и markdown.
