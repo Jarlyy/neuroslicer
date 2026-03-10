@@ -27,8 +27,12 @@ class HFClient:
                 },
             }
         ).encode("utf-8")
+
+        return self._post_json(self.config.endpoint(), payload, timeout_s)
+
+    def _post_json(self, url: str, payload: bytes, timeout_s: float) -> Any:
         req = request.Request(
-            self.config.endpoint(),
+            url,
             data=payload,
             headers={
                 "Authorization": f"Bearer {self.config.token}",
@@ -42,6 +46,12 @@ class HFClient:
                 body = response.read().decode("utf-8")
         except HTTPError as exc:
             detail = exc.read().decode("utf-8", errors="ignore")
+            # Helpful message for old endpoint users.
+            if exc.code == 410 and "router.huggingface.co" in detail:
+                raise RuntimeError(
+                    "HF API endpoint is deprecated. Use router endpoint (default now) or set HF_ENDPOINT. "
+                    f"Details: {detail}"
+                ) from exc
             raise RuntimeError(f"HF API error: {exc.code} {detail}") from exc
         except URLError as exc:
             raise RuntimeError(f"HF API connection error: {exc.reason}") from exc

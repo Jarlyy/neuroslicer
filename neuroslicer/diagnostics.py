@@ -45,11 +45,15 @@ class DiagnosticEngine:
 
         if use_hf and self.hf_config.enabled:
             prompt = self._build_prompt(user_text, matches, profile_parameters)
-            payload = HFClient(self.hf_config).analyze(prompt)
-            generated_text = HFClient.extract_text(payload)
-            parsed = _parse_llm_json(generated_text)
-            if parsed is not None:
-                return _diagnosis_from_llm(parsed, matches)
+            try:
+                payload = HFClient(self.hf_config).analyze(prompt)
+                generated_text = HFClient.extract_text(payload)
+                parsed = _parse_llm_json(generated_text)
+                if parsed is not None:
+                    return _diagnosis_from_llm(parsed, matches)
+            except RuntimeError:
+                # Graceful fallback when HF API is unavailable or endpoint has changed.
+                pass
 
         # Deterministic fallback
         primary = matches[0]

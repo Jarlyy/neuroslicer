@@ -39,3 +39,19 @@ def test_diagnose_uses_llm_json_when_available(monkeypatch):
     assert result.confidence > 0.8
     assert result.profile_changes
     assert result.profile_changes[0].parameter == "nozzle_temperature"
+
+
+def test_diagnose_falls_back_when_hf_fails(monkeypatch):
+    kb = KnowledgeBase.from_json("data/troubleshooting_seed.json")
+    engine = DiagnosticEngine(kb, hf_config=HFConfig(token="hf_dummy"))
+
+    from neuroslicer import diagnostics as d
+
+    def _raise(*args, **kwargs):
+        raise RuntimeError("HF API error")
+
+    monkeypatch.setattr(d.HFClient, "analyze", _raise)
+
+    result = engine.diagnose("first layer not sticking", use_hf=True)
+    assert result.defect_type in {"Poor Bed Adhesion", "Layer Separation", "Stringing"}
+    assert result.recommendations

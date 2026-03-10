@@ -17,6 +17,8 @@ pip install -e .
 ```bash
 export HF_TOKEN="hf_..."
 export HF_MODEL_ID="openai/gpt-oss-120b"
+# optional: custom endpoint override
+# export HF_ENDPOINT="https://router.huggingface.co/hf-inference/models/openai/gpt-oss-120b"
 ```
 
 ## Запуск CLI
@@ -51,7 +53,8 @@ export TROUBLESHOOTING_GUIDE_DIR="/path/to/3D-printing-troubleshooting-guide"
 
 ### 3) Использование Hugging Face API (gpt-oss-120b)
 
-Если `HF_TOKEN` задан, нейросетевой анализ включается автоматически.
+Если `HF_TOKEN` задан, нейросетевой анализ включается автоматически (через `router.huggingface.co`).
+Если HF временно недоступен, приложение автоматически перейдёт в fallback без падения.
 
 ```bash
 neuroslicer "Плохая адгезия первого слоя"
