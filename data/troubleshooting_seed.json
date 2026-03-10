@@ -1,0 +1,55 @@
+[
+  {
+    "category": "Layer Separation",
+    "symptoms": [
+      "layers split",
+      "part breaks between layers",
+      "слои расслаиваются и деталь ломается"
+    ],
+    "causes": [
+      "Nozzle temperature too low",
+      "Part cooling too aggressive"
+    ],
+    "recommendations": [
+      "Increase nozzle temperature by 5-15°C",
+      "Reduce part cooling fan speed for first layers",
+      "Lower print speed by 10-20%"
+    ],
+    "source": "seed:prd-example"
+  },
+  {
+    "category": "Stringing",
+    "symptoms": [
+      "thin hairs between travel moves",
+      "oozing"
+    ],
+    "causes": [
+      "Retraction too low",
+      "Nozzle temperature too high"
+    ],
+    "recommendations": [
+      "Increase retraction distance",
+      "Lower nozzle temperature by 5-10°C",
+      "Increase travel speed"
+    ],
+    "source": "seed:common-troubleshooting"
+  },
+  {
+    "category": "Poor Bed Adhesion",
+    "symptoms": [
+      "first layer not sticking",
+      "corners lifting"
+    ],
+    "causes": [
+      "Bed not leveled",
+      "Bed temperature too low",
+      "Dirty build plate"
+    ],
+    "recommendations": [
+      "Re-level bed and tune Z-offset",
+      "Increase bed temperature by 5-10°C",
+      "Clean build plate with IPA"
+    ],
+    "source": "seed:common-troubleshooting"
+  }
+]
